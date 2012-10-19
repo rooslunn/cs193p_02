@@ -8,53 +8,28 @@
 
 #import "CalculatorViewController.h"
 
+@interface CalculatorViewController()
+@property (nonatomic) BOOL userIsInTheMiddleOfEntering;
+@end
+
 @implementation CalculatorViewController
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
+@synthesize display;
+@synthesize userIsInTheMiddleOfEntering;
+
+- (IBAction)digitPressed:(UIButton *)sender {
+    NSString *digit = [sender currentTitle];
+    if (self.userIsInTheMiddleOfEntering) {
+        self.display.text = [self.display.text stringByAppendingString:digit];
+    } else {
+        self.display.text = digit;
+        self.userIsInTheMiddleOfEntering = YES;
+    }
+}
+- (IBAction)enterPressed {
 }
 
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+- (IBAction)operationPressed:(UIButton *)sender {
 }
 
 @end
