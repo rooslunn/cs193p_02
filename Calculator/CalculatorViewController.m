@@ -17,6 +17,7 @@
 @implementation CalculatorViewController
 
 @synthesize display;
+@synthesize history;
 @synthesize userIsInTheMiddleOfEntering;
 @synthesize brain = _brain;
 
@@ -25,6 +26,46 @@
         _brain = [[CalculatorBrain alloc] init];
     }
     return _brain;
+}
+
+- (IBAction)clearDisplay {
+//    [self.brain clearStack];
+    self.display.text = @"0";
+    self.userIsInTheMiddleOfEntering = NO;
+}
+
+- (void)updateHistory:(NSString *)action {
+    NSArray *actions = [self.history.text componentsSeparatedByString:@" "];
+    NSMutableArray *new_actions = [NSMutableArray arrayWithArray:actions];
+    [new_actions addObject:action];
+    if (new_actions.count > 6) {
+        [new_actions removeObjectAtIndex:0];
+    }
+    self.history.text = [new_actions componentsJoinedByString:@" "];
+}
+
+- (IBAction)clearLastDigit {
+    NSUInteger len = [self.display.text length];
+    self.display.text = [self.display.text substringToIndex:len-1];
+    if ([self.display.text length] == 0) {
+        [self clearDisplay];
+    }
+}
+
+- (IBAction)dotPressed:(UIButton *)sender {
+    NSRange range = [self.display.text rangeOfString:@"."];
+    if (range.location == NSNotFound) {
+        self.display.text = [self.display.text stringByAppendingString:@"."];
+        self.userIsInTheMiddleOfEntering = YES;
+    }
+}
+
+- (IBAction)signDigit {
+    if ([self.display.text hasPrefix:@"-"]) {
+        self.display.text = [self.display.text substringFromIndex:1];
+    } else {
+        self.display.text = [@"-" stringByAppendingString:self.display.text];
+    }
 }
 
 - (IBAction)digitPressed:(UIButton *)sender {
@@ -39,7 +80,8 @@
 
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
-    self.userIsInTheMiddleOfEntering = NO;
+    [self updateHistory:self.display.text];
+    [self clearDisplay];
 }
 
 - (IBAction)operationPressed:(UIButton *)sender {
@@ -49,6 +91,7 @@
     NSString *operation = [sender currentTitle];
     double result = [self.brain performOperation:operation];
     self.display.text = [NSString stringWithFormat:@"%g", result];
+    [self updateHistory:operation];
 }
 
 @end

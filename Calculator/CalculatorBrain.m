@@ -27,6 +27,10 @@
     _operandStack = anArray;
 }
 
+- (void)clearStack {
+    [self.operandStack removeAllObjects];
+}
+
 - (void)pushOperand:(double)operand {
     NSNumber *operandObject = [NSNumber numberWithDouble:operand];
     [self.operandStack addObject:operandObject];
@@ -42,7 +46,7 @@
 
 - (double)performOperation:(NSString *)operation {
     double result = 0;
-    
+
     if ([operation isEqualToString:@"+"]) {
         result = [self popOperand] + [self popOperand];
     } else if ([@"*" isEqualToString:operation]) {
@@ -55,10 +59,22 @@
         if (devisor) {
             result = [self popOperand] / devisor;
         }
+    } else if ([operation isEqualToString:@"sin"]) {
+        result = sin([self popOperand]);
+    } else if ([operation isEqualToString:@"cos"]) {
+        result = cos([self popOperand]);
+    } else if ([operation isEqualToString:@"sqrt"]) {
+        result = sqrt([self popOperand]);
+    } else if ([operation isEqualToString:@"log"]) {
+        result = log([self popOperand]);
+    } else if ([operation isEqualToString:@"π"]) {
+        result = M_PI;
+    } else if ([operation isEqualToString:@"e"]) {
+        result = M_E;
     }
-     
+
     [self pushOperand:result];
-    
+
     return result;
 }
 
