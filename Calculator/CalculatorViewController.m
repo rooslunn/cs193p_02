@@ -35,13 +35,13 @@
 }
 
 - (void)updateHistory:(NSString *)action {
-    NSArray *actions = [self.history.text componentsSeparatedByString:@" "];
-    NSMutableArray *new_actions = [NSMutableArray arrayWithArray:actions];
-    [new_actions addObject:action];
-    if (new_actions.count > 6) {
-        [new_actions removeObjectAtIndex:0];
+    NSMutableArray *actions = [[self.history.text componentsSeparatedByString:@" "] 
+                               mutableCopy];
+    [actions addObject:action];
+    if (actions.count > 6) {
+        [actions removeObjectAtIndex:0];
     }
-    self.history.text = [new_actions componentsJoinedByString:@" "];
+    self.history.text = [actions componentsJoinedByString:@" "];
 }
 
 - (IBAction)clearLastDigit {
