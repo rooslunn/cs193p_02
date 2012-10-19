@@ -26,6 +26,7 @@
         self.userIsInTheMiddleOfEntering = YES;
     }
 }
+
 - (IBAction)enterPressed {
 }
 
