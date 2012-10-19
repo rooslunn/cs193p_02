@@ -45,8 +45,20 @@
     
     if ([operation isEqualToString:@"+"]) {
         result = [self popOperand] + [self popOperand];
+    } else if ([@"*" isEqualToString:operation]) {
+        result = [self popOperand] * [self popOperand];
+    } else if ([@"-" isEqualToString:operation]) {
+        double subtrahend = [self popOperand];
+        result = [self popOperand] - subtrahend;
+    } else if ([operation isEqualToString:@"/"]) {
+        double devisor = [self popOperand];
+        if (devisor) {
+            result = [self popOperand] / devisor;
+        }
     }
-         
+     
+    [self pushOperand:result];
+    
     return result;
 }
 
